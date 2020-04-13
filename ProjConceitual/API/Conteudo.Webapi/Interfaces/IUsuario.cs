@@ -12,5 +12,9 @@ namespace Conteudo.Webapi.Interfaces
 
 		void Post(Usuario usuario);
 
+		void Update(int id, Usuario usuario);
+
+		Usuario GetById(int id);
+
 	}
 }

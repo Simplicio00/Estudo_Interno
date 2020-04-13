@@ -50,10 +50,45 @@ namespace Conteudo.Webapi.Controllers
                     return Forbid(ex.Message.ToString());
                 }
             }
-            else
-            {
-                return badrequest;
-            }
+
+            return badrequest;
         }
+
+
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+            IActionResult result = NotFound("O usuário não existe");
+            var usr = banco.GetById(id);
+
+            if (usr != null)
+            {
+                return Ok(usr);
+            }
+            return result;
+        }
+
+
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, Usuario usuario)
+        {
+            IActionResult result = NotFound("O usuário não existe");
+            var usr = banco.GetById(id);
+            
+            if (usr != null)
+            {
+                try
+                {
+                    banco.Update(usr.IdUsuario, usuario);
+                    return StatusCode(200,"Atualizado com sucesso!");
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message.ToString());
+                }
+            }
+            return result;
+        }
+
     }
 }

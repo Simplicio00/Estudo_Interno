@@ -6484,11 +6484,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Acer\\Desktop\\soluc\\C#\\teste\\Conteudo.Webapi\\Conteudo.Webapi.csproj",
+      "projectUniqueName": "C:\\Users\\Acer\\Desktop\\soluc\\C#\\Estudo_Interno\\ProjConceitual\\API\\Conteudo.Webapi\\Conteudo.Webapi.csproj",
       "projectName": "Conteudo.Webapi",
-      "projectPath": "C:\\Users\\Acer\\Desktop\\soluc\\C#\\teste\\Conteudo.Webapi\\Conteudo.Webapi.csproj",
+      "projectPath": "C:\\Users\\Acer\\Desktop\\soluc\\C#\\Estudo_Interno\\ProjConceitual\\API\\Conteudo.Webapi\\Conteudo.Webapi.csproj",
       "packagesPath": "C:\\Users\\Acer\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Acer\\Desktop\\soluc\\C#\\teste\\Conteudo.Webapi\\obj\\",
+      "outputPath": "C:\\Users\\Acer\\Desktop\\soluc\\C#\\Estudo_Interno\\ProjConceitual\\API\\Conteudo.Webapi\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
