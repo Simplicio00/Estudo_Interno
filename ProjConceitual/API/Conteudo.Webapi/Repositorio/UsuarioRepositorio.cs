@@ -112,7 +112,6 @@ namespace Conteudo.Webapi.Repositorio
                 command.ExecuteNonQuery();
                 //Fecha a conexão após o término da execução
                 connection.Close();
-
             }
             else if (usuario.Nome != null)
             {

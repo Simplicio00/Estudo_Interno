@@ -50,7 +50,6 @@ namespace Conteudo.Webapi.Controllers
                     return Forbid(ex.Message.ToString());
                 }
             }
-
             return badrequest;
         }
 
