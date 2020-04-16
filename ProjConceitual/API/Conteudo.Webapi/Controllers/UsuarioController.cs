@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Conteudo.Webapi.DataContent;
 using Conteudo.Webapi.Interfaces;
 using Conteudo.Webapi.Models;
 using Conteudo.Webapi.Repositorio;
@@ -11,35 +12,45 @@ using Microsoft.AspNetCore.Mvc;
 namespace Conteudo.Webapi.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("[controller]")]
     public class UsuarioController : ControllerBase
     {
         private IUsuario banco { get; set; }
+        private DefaultValues postData;
         public UsuarioController()
         {
             banco = new UsuarioRepositorio();
+            postData = new DefaultValues();
         }
+        public IActionResult InvalidUser() { return NotFound("O usuário não existe"); }
+        public IActionResult InvalidMail() { return NotFound("O Email já está cadastrado"); }
+        public IActionResult Error(string erro) { return BadRequest($"Ocorreu um erro: {erro}"); }
+
 
         [HttpGet]
         public IActionResult Get()
         {
             var lista = banco.Get();
+            int limite = lista.Count;
+
+            if (lista.Exists(m => m.StatusU == false))
+                lista.RemoveAll(m => m.StatusU == false);
+
             if (lista.Count != 0)
-            {
-                return Ok(lista);
-            }
+            return Ok(lista);
+
+            postData.PostDefaultUser(limite);
             return NoContent();
         }
 
         [HttpPost]
         public IActionResult Post(Usuario usuario)
         {
-            IActionResult badrequest = BadRequest("Este email já está cadastrado");
             var lista = banco.Get();
 
-            if (!lista.Contains(lista.FirstOrDefault(a => a.Email == usuario.Email)))
-            {
+            if (!lista.Contains(
+                lista.FirstOrDefault(a => a.Email == usuario.Email)))
                 try
                 {
                     banco.Post(usuario);
@@ -47,35 +58,32 @@ namespace Conteudo.Webapi.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return Forbid(ex.Message.ToString());
+                    return Error(ex.Message);
                 }
-            }
-            return badrequest;
+            
+            return InvalidMail();
         }
 
 
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            IActionResult result = NotFound("O usuário não existe");
             var usr = banco.GetById(id);
 
-            if (usr != null)
-            {
+            if (usr != null && usr.StatusU != false)
                 return Ok(usr);
-            }
-            return result;
+            
+            return InvalidUser();
         }
 
 
         [HttpPut("{id}")]
         public IActionResult Put(int id, Usuario usuario)
         {
-            IActionResult result = NotFound("O usuário não existe");
             var usr = banco.GetById(id);
             
-            if (usr != null)
-            {
+            if (usr != null && usr.StatusU != false)
+
                 try
                 {
                     banco.Update(usr.IdUsuario, usuario);
@@ -83,10 +91,10 @@ namespace Conteudo.Webapi.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest(ex.Message.ToString());
+                    return Error(ex.Message);
                 }
-            }
-            return result;
+            
+            return InvalidUser();
         }
 
     }

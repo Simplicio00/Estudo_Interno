@@ -11,7 +11,8 @@ create table Usuario
 IdUsuario int primary key identity,
 Nome varchar(50) not null,
 Email varchar(50) not null unique,
-Senha varchar(50) not null
+Senha varchar(50) not null,
+StatusU bit default 1 not null,
 )
 
 go

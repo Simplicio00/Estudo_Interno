@@ -1,4 +1,5 @@
-﻿using Conteudo.Webapi.Interfaces;
+﻿using Conteudo.Webapi.DataContent;
+using Conteudo.Webapi.Interfaces;
 using Conteudo.Webapi.Models;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace Conteudo.Webapi.Repositorio
                 connect.Open();
 
                 //Faz o comando interno do banco de dados para a busca de informação
-                var pergunta = "select IdUsuario, Nome, Email, Senha from Usuario";
+                var pergunta = "select IdUsuario, Nome, Email, Senha, StatusU from Usuario";
 
                 //Estabelece um comando autenticado para o banco de dados 
                 SqlCommand sqlCommand = new SqlCommand(pergunta, connect);
@@ -46,7 +47,8 @@ namespace Conteudo.Webapi.Repositorio
                         IdUsuario = Convert.ToInt32(leitor[0]),
                         Nome = Convert.ToString(leitor[1]),
                         Email = Convert.ToString(leitor[2]),
-                        Senha = Convert.ToString(leitor[3])
+                        Senha = Convert.ToString(leitor[3]),
+                        StatusU = Convert.ToBoolean(leitor[4])
                     };
                     //E é adicionado na lista de usuários
                     listaDeUsuarios.Add(usuario);
@@ -174,18 +176,19 @@ namespace Conteudo.Webapi.Repositorio
                         IdUsuario = Convert.ToInt32(leitor[0]),
                         Nome = Convert.ToString(leitor[1]),
                         Email = Convert.ToString(leitor[2]),
-                        Senha = Convert.ToString(leitor[3])
+                        Senha = Convert.ToString(leitor[3]),
+                        StatusU = Convert.ToBoolean(leitor[4])
                     };
                     //O usuário vazio recebe um usuário válido
                     usuarioBuscado = usuario;
                 }
 
                 //Validação para saber se o usuário existe
-                if (usuarioBuscado.Nome == null && usuarioBuscado.Email == null && usuarioBuscado.Senha == null )
-                {
+                if (usuarioBuscado.Nome == null && 
+                    usuarioBuscado.Email == null && 
+                    usuarioBuscado.Senha == null )
                     usuarioBuscado = null;
-                }
-
+                
                 //Fecha a conexão com o banco de dados e armazena o usuário.
                 connection.Close();
 
