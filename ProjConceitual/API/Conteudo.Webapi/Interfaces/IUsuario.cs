@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Conteudo.Webapi.Interfaces
 {
-	interface IUsuario
+	public interface IUsuario
 	{
 		List<Usuario> Get();
 
@@ -15,6 +15,8 @@ namespace Conteudo.Webapi.Interfaces
 		void Update(int id, Usuario usuario);
 
 		Usuario GetById(int id);
+
+		void StatusOff(int id);
 
 	}
 }

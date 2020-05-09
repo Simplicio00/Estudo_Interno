@@ -202,6 +202,26 @@ namespace Conteudo.Webapi.Repositorio
             }
         }
 
+        public void StatusOff(int id)
+        {
+            //Comando para inserir dados na tabela.
+            string post = $"update Usuario set StatusU = 0 where IdUsuario = {id}";
 
+            //Estabelece uma conexão, puxando a string de conexão manual
+            SqlConnection connection = new SqlConnection("Data Source=LUCASSOLIVEIRA\\SQLEXPRESS;" +
+                " initial catalog=BancoUConteudo; integrated security=true;");
+
+            //Cria um comando, e puxa a conexão para autenticar o comando
+            SqlCommand command = new SqlCommand(post, connection);
+
+            //Abre a conexão
+            connection.Open();
+
+            //executa o comando da string POST no banco de dados
+            command.ExecuteNonQuery();
+
+            //Fecha a conexão após a inserção dos dados
+            connection.Close();
+        }
     }
 }

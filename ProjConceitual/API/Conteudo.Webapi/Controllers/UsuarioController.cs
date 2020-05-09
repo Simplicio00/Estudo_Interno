@@ -16,16 +16,17 @@ namespace Conteudo.Webapi.Controllers
     [Route("[controller]")]
     public class UsuarioController : ControllerBase
     {
-        private IUsuario banco { get; set; }
-        private DefaultValues postData;
-        public UsuarioController()
+        private readonly IUsuario banco;
+        private readonly DefaultValues postData;
+        public UsuarioController(DefaultValues postData, IUsuario banco)
         {
-            banco = new UsuarioRepositorio();
-            postData = new DefaultValues();
+            this.banco = banco;
+            this.postData = postData;
         }
-        public IActionResult InvalidUser() { return NotFound("O usuário não existe"); }
-        public IActionResult InvalidMail() { return NotFound("O Email já está cadastrado"); }
-        public IActionResult Error(string erro) { return BadRequest($"Ocorreu um erro: {erro}"); }
+
+        public IActionResult InvalidUser() { return NotFound(new { msg = "Usuário não encontrado"}); }
+        public IActionResult InvalidMail() { return Conflict(new { msg = "Email cadastrado" }); }
+        public IActionResult Error(string erro) { return BadRequest( new { msg= $"Ocorreu um erro: {erro}"}); }
 
 
         [HttpGet]
@@ -38,7 +39,7 @@ namespace Conteudo.Webapi.Controllers
                 lista.RemoveAll(m => m.StatusU == false);
 
             if (lista.Count != 0)
-            return Ok(lista);
+                return Ok(lista);
 
             postData.PostDefaultUser(limite);
             return NoContent();
@@ -87,13 +88,33 @@ namespace Conteudo.Webapi.Controllers
                 try
                 {
                     banco.Update(usr.IdUsuario, usuario);
-                    return StatusCode(200,"Atualizado com sucesso!");
+                    return StatusCode(200);
                 }
                 catch (Exception ex)
                 {
                     return Error(ex.Message);
                 }
             
+            return InvalidUser();
+        }
+
+
+        [HttpPost("Desativar/{id}")]
+        public IActionResult DesativarUsuario(int id)
+        {
+            var usr = banco.GetById(id);
+
+            if (usr != null && usr.StatusU != false)
+                try
+                {
+                    banco.StatusOff(usr.IdUsuario);
+                    return StatusCode(200);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+
             return InvalidUser();
         }
 

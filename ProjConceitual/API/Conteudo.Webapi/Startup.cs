@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Conteudo.Webapi.Controllers;
 using Conteudo.Webapi.DataContent;
+using Conteudo.Webapi.Interfaces;
+using Conteudo.Webapi.Repositorio;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,7 +30,8 @@ namespace Conteudo.Webapi
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddControllers().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-			services.AddScoped<DefaultValues>();
+			services.AddSingleton<IUsuario, UsuarioRepositorio>();
+			services.AddSingleton<DefaultValues>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
